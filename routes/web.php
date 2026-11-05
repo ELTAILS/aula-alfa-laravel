@@ -10,6 +10,8 @@ use App\Http\Controllers\UserController;
  */
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
+Route::post('/register', [AuthController::class, 'create'])->name('register.store');
 
 /**
  * Rotas protegidas (necessário autenticação)
@@ -17,8 +19,6 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::group(['middleware' => 'auth'], function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
-
-
 
 // Route::get('/admin/users',[UserController::class, 'index'])->name('admin.users.index');
 // Route::get('admin/user/{user}' ,[UserController::class, 'show']);
