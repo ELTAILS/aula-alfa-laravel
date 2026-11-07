@@ -16,7 +16,7 @@ class AuthController extends Controller
      */
     public function login(): view
     {
-        return view('login.login');
+        return view('auth.login');
     }
 
     /**
@@ -25,7 +25,7 @@ class AuthController extends Controller
      */
     public function register(): view
     {
-        return view('login.register');
+        return view('user.create');
     }
 
     /**
