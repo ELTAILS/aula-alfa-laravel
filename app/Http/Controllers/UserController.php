@@ -20,30 +20,32 @@ class UserController extends Controller
 
    public function show(int $id)
    {
-    $user = new User();
-    $user = $user->show_user($id);
+        $user = new User();
+        $user = $user->show_user($id);
 
-    return view('user.show',[
-        'user' => $user]);
-
+        return view('user.show',['user' => $user]);
    }
 
    public function register()
    {
-    return view('user.create');
+        return view('user.create');
    }
 
    public function create(Request $request)
    {
 
-    $input = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8',
-    ]);
+        $input = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+        ]);
 
-    User::create($input);
-    return redirect()->route('admin.users.index');
+        User::create($input);
+
+        // Verifica se o usuário logado é admin e redireciona para a página de usuários
+        if ($request->user()?->profile?->type === 'admin') return redirect()->route('admin.users.index')->with('success', 'Usuário cadastrado com sucesso!');
+
+        return redirect()->route('login')->with('success', 'Cadastro realizado! Faça login para continuar.');
    }
 
     //Função para ir na pagina de recuperar senha

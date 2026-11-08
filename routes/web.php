@@ -1,26 +1,42 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Route;
-use App\Models\User;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\EnsureAdmin;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Pagina inicial
  */
-Route::get('/', function () { return view('index'); })->name('home');
+Route::get('/', function () { return view('index'); })->middleware('auth')->name('home');
 
 /**
- * Rotas de autenticação (publicas)
+ * Rotas de login
  */
 Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
-Route::post('/register', [AuthController::class, 'create'])->name('register.store');
+Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:5,1')->name('login.authenticate');
 
 /**
- * Rotas protegidas (necessário autenticação)
+ * Rotas de cadastro
  */
-Route::group(['middleware' => 'auth'], function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register', [UserController::class, 'register'])->name('register');
+Route::post('/store', [UserController::class, 'create'])->name('users.store');
+
+/**
+ * Logout
+ */
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+/**
+ * Area administrativa
+ */
+Route::middleware(['auth', EnsureAdmin::class])->prefix('admin')->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/user/{user}', [UserController::class, 'show']);
 });
+
+/**
+ * Recuperacao de senha (preservadas)
+ */
+Route::get('resetPassword', [UserController::class, 'pageResetPassword'])->name('user.reset.index');
+Route::post('resetPassword', [UserController::class, 'resetPassword'])->name('user.reset.store');

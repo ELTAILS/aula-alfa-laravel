@@ -16,7 +16,7 @@
                 <div class="auth-alert" role="alert">{{ session('success') }}</div>
             @endif
 
-            <form action="{{ route('register.store') }}" method="POST">
+            <form action="{{ route('users.store') }}" method="POST">
                 @csrf
 
                 <div class="auth-field">
