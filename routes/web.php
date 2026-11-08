@@ -4,11 +4,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureAdmin;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /**
  * Pagina inicial
  */
-Route::get('/', function () { return view('index'); })->middleware('auth')->name('home');
+Route::get('/', function () { return view('index', ['user' => Auth::user()]); })->middleware('auth')->name('home');
 
 /**
  * Rotas de login

@@ -1,4 +1,5 @@
 pagina home
+bem vindo {{ $user->name }}
 
 <form action="{{ route('logout') }}" method="post">
     @csrf

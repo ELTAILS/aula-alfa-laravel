@@ -13,7 +13,7 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        if (! app()->environment('local')) {
+        if (!app()->environment('local')) {
             $this->command?->warn('AdminSeeder ignorado: so roda com APP_ENV=local.');
             return;
         }
