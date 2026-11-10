@@ -7,6 +7,9 @@
     <title>{{$title}}</title>
 </head>
 <body>
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
     @foreach ($users as $user )
     <h1> Nome: {{ $user->name }}</h1>
     <p> Enail: {{ $user->email }}</p>
@@ -16,10 +19,10 @@
     @else
         <p>Usuario com id  <> 10</p>
     @endif
-        
+
     @endforeach
 
     {{ $users->links() }}
-    
+
 </body>
 </html>
